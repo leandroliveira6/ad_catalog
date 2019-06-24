@@ -6,7 +6,10 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 class ProdutosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('COMPILANDO TELA DE PRODUTOS');
+    
     final ProdutosBloc bloc = BlocProvider.getBloc<ProdutosBloc>();
+    bloc.filtrarProdutos.add(null);
 
     return Scaffold(
       appBar: AppBar(
@@ -16,7 +19,9 @@ class ProdutosView extends StatelessWidget {
         stream: bloc.obterProdutos,
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data.length > 0) {
+            print('Lista de produtos recebida');
+            print(snapshot.data);
             return Container(
               padding: EdgeInsets.all(10),
               child: ListView.builder(

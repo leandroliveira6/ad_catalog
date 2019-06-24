@@ -16,6 +16,7 @@ class ProdutoWidget {
       child: Card(
         child: Row(
           children: <Widget>[
+            Text('Card Produto'),
             Text('Imagem'),
             Column(
               children: <Widget>[
@@ -31,19 +32,18 @@ class ProdutoWidget {
   }
 
   static Widget obterDescricao(BuildContext context, Produto produto) {
-    return Card(
-      child: Row(
-        children: <Widget>[
-          Text('Imagem'),
-          Column(
-            children: <Widget>[
-              //Text(produto.categoria),
-              Text(produto.marca),
-              Text(produto.modelo),
-            ],
-          )
-        ],
-      ),
+    return Row(
+      children: <Widget>[
+        Text('Descricao Produto'),
+        Text('Imagem'),
+        Column(
+          children: <Widget>[
+            //Text(produto.categoria),
+            Text(produto.marca),
+            Text(produto.modelo),
+          ],
+        )
+      ],
     );
   }
 }
