@@ -7,7 +7,7 @@ class ProdutosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('COMPILANDO TELA DE PRODUTOS');
-    
+
     final ProdutosBloc bloc = BlocProvider.getBloc<ProdutosBloc>();
     bloc.filtrarProdutos.add(null);
 
@@ -19,7 +19,9 @@ class ProdutosView extends StatelessWidget {
         stream: bloc.obterProdutos,
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData && snapshot.data.length > 0) {
+          final estaVisivel = ModalRoute.of(context).isCurrent;
+          print('Tela de produtos visivel? ' + (estaVisivel ? 'Sim' : 'Nao'));
+          if (snapshot.hasData && snapshot.data.length > 0 && estaVisivel) {
             print('Lista de produtos recebida');
             print(snapshot.data);
             return Container(
@@ -34,7 +36,7 @@ class ProdutosView extends StatelessWidget {
           }
           return Container(
               child: Center(
-            child: CircularProgressIndicator(),
+            child: estaVisivel ? CircularProgressIndicator() : Container(),
           ));
         },
       ),

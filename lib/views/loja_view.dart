@@ -34,7 +34,9 @@ class LojaView extends StatelessWidget {
             stream: BlocProvider.getBloc<LojaBloc>().obterLoja,
             initialData: null,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
+              final estaVisivel = ModalRoute.of(context).isCurrent;
+              print('Tela de loja visivel? ' + (estaVisivel ? 'Sim' : 'Nao'));
+              if (snapshot.hasData && estaVisivel) {
                 print('Instancia de loja recebida');
                 return Container(
                   child: LojaWidget.obterDescricao(context, snapshot.data),
@@ -42,7 +44,7 @@ class LojaView extends StatelessWidget {
               }
               return Container(
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: estaVisivel ? CircularProgressIndicator() : Container(),
                 ),
               );
             },
