@@ -6,31 +6,31 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LojaBloc extends BlocBase {
   final _lojaController = StreamController<Loja>.broadcast();
-  final _filtroController = StreamController<String>();
-
   final _colecaoLojas = Firestore.instance.collection("lojas");
+
+  Loja _loja;
+
+  Stream get obterLoja => _lojaController.stream;
 
   LojaBloc() {
     print('Instancia de LojaBloc criada');
-    _filtroController.stream.listen(consultarLoja);
   }
 
-  consultarLoja(idLoja) {
-    print('LojaBloc idLoja ' + idLoja.toString());
-    _colecaoLojas.document(idLoja).get().then(_obterLoja);
+  void especificarLoja(idLoja) {
+    _colecaoLojas.document(idLoja).get().then(_ciarLoja).whenComplete(_enviarLoja);
   }
 
-  _obterLoja(DocumentSnapshot ds) {
-    _lojaController.sink.add(Loja.fromJson({ds.documentID: ds.data}));
+  void _ciarLoja(ds) {
+    _loja = Loja.fromJson({ds.documentID: ds.data});
   }
 
-  Stream get obterLoja => _lojaController.stream;
-  Sink get especificarLoja => _filtroController.sink;
+  void _enviarLoja(){
+    _lojaController.sink.add(_loja);
+  }
 
   @override
   void dispose() {
     _lojaController.close();
-    _filtroController.close();
     super.dispose();
   }
 }

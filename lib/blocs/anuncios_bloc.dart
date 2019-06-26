@@ -6,46 +6,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AnunciosBloc extends BlocBase {
   final _anunciosController = StreamController<List<Anuncio>>.broadcast();
-  final _filtroController = StreamController<Map<String, String>>();
-
   final _colecaoAnuncios = Firestore.instance.collection("anuncios");
+
+  List<Anuncio> _listaAnuncios = [];
+
+  Stream get obterAnuncios => _anunciosController.stream;
 
   AnunciosBloc() {
     print('Instancia de AnunciosBloc criada');
-    _filtroController.stream.listen(consultarAnuncios);
   }
 
-  consultarAnuncios(Map<String, String> idMap) {
-    if (idMap.containsKey('idLoja')) {
-      // criar lista filtrando por loja
-      print('idLoja recebido ' + idMap['idLoja']);
-      _colecaoAnuncios.where('idLoja', isEqualTo: idMap['idLoja']).getDocuments().then(_atualizarListaDeAnuncios);
-      //_anunciosController.sink.add(lista.where((anuncio) => anuncio.idLoja == idMap['idLoja']).toList());
-    } else if (idMap.containsKey('idProduto')) {
-      // criar lista filtrando por produto
-      print('idProduto recebido ' + idMap['idProduto']);
-      _colecaoAnuncios.where('idProduto', isEqualTo: idMap['idProduto']).getDocuments().then(_atualizarListaDeAnuncios);
-      //_anunciosController.sink.add(lista.where((anuncio) => anuncio.idProduto == idMap['idProduto']).toList());
-    } else {
-      _anunciosController.sink.add([]);
-    }
+  especificarAnuncios(campo, valor) {
+    _colecaoAnuncios.where(campo, isEqualTo: valor).getDocuments().then(_criarLista).whenComplete(_enviarLista);
   }
 
-  _atualizarListaDeAnuncios(QuerySnapshot qs){
-    List<Anuncio> listaDeAnuncios = qs.documents.map<Anuncio>((snapshotDocument){
-      print('Entrou?');
-      return Anuncio.fromJson({snapshotDocument.documentID: snapshotDocument.data});
-    }).toList();
-    _anunciosController.sink.add(listaDeAnuncios);
+  _criarLista(QuerySnapshot qs){
+    _listaAnuncios.clear();
+    qs.documents.forEach((ds){
+      _listaAnuncios.add(Anuncio.fromJson({ds.documentID: ds.data}));
+    });
   }
 
-  Stream get obterAnuncios => _anunciosController.stream;
-  Sink get filtrarAnuncios => _filtroController.sink;
+  _enviarLista(){
+    _anunciosController.sink.add(_listaAnuncios);
+  }
 
   @override
   void dispose() {
     _anunciosController.close();
-    _filtroController.close();
     super.dispose();
   }
 }

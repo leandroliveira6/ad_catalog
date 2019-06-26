@@ -35,7 +35,7 @@ class ProdutosBloc extends BlocBase {
         .whenComplete(_enviarLista);
   }
 
-  _criarLista(QuerySnapshot qs) {
+  void _criarLista(qs) {
     _listaProdutos.clear();
     qs.documents.forEach((ds) {
       if (_filtrosCategoria.isNotEmpty || _filtrosMarca.isNotEmpty) {
@@ -59,7 +59,7 @@ class ProdutosBloc extends BlocBase {
     });
   }
 
-  _enviarLista() {
+  void _enviarLista() {
     _produtosController.sink.add(_listaProdutos);
   }
 

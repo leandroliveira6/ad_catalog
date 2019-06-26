@@ -7,16 +7,16 @@ class SidebarBloc extends BlocBase{
   final _sidebarController = StreamController<bool>.broadcast();
   bool _detalhesDoUsuario = false;
 
+  Stream get detalhesUsuarioAtivo => _sidebarController.stream;
+
   SidebarBloc(){
     print('Instancia de SidebarBloc criada');
   }
 
-  trocarCorpo() {
+  void trocarCorpo() {
     _detalhesDoUsuario = !_detalhesDoUsuario;
     _sidebarController.sink.add(_detalhesDoUsuario);
   }
-
-  Stream get detalhesUsuarioAtivo => _sidebarController.stream;
 
   @override
   void dispose(){

@@ -17,7 +17,7 @@ class MarcasBloc extends BlocBase {
     print('Instancia de MarcasBloc criada');
   }
 
-  alternarFiltros(filtro) {
+  void alternarFiltros(filtro) {
     if (_filtrosAtivos.contains(filtro)) {
       _filtrosAtivos.remove(filtro);
     } else {
@@ -28,7 +28,7 @@ class MarcasBloc extends BlocBase {
     atualizarLista();
   }
 
-  atualizarLista() {
+  void atualizarLista() {
     _colecaoMarcas
         .orderBy('clicks', descending: true)
         .getDocuments()
@@ -36,7 +36,7 @@ class MarcasBloc extends BlocBase {
         .whenComplete(_enviarLista);
   }
 
-  _criarLista(QuerySnapshot qs) {
+  void _criarLista(QuerySnapshot qs) {
     _marcas = _filtrosAtivos.map((filtro) => {filtro: true}).toList();
     qs.documents.forEach((ds) {
       if (!_filtrosAtivos.contains(ds.documentID)) {
@@ -45,7 +45,7 @@ class MarcasBloc extends BlocBase {
     });
   }
 
-  _enviarLista() {
+  void _enviarLista() {
     _marcasController.sink.add(_marcas);
   }
 
