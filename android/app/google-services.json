@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "799109612027",
+    "firebase_url": "https://ad-catalog.firebaseio.com",
+    "project_id": "ad-catalog",
+    "storage_bucket": "ad-catalog.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799109612027:android:72e359ec2d5e6f2f",
+        "android_client_info": {
+          "package_name": "com.example.ad_catalog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799109612027-4p7tb3f79kjou4ddgjp1vt8c235frerj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxH4GVWbS5JPiruyONNmfHyo5KJ7iN2KI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799109612027-4p7tb3f79kjou4ddgjp1vt8c235frerj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

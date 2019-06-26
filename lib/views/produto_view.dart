@@ -1,7 +1,7 @@
 import 'package:ad_catalog/blocs/anuncios_bloc.dart';
 import 'package:ad_catalog/models/produto.dart';
-import 'package:ad_catalog/widgets/anuncio_widget.dart';
-import 'package:ad_catalog/widgets/produto_widget.dart';
+import 'package:ad_catalog/widgets/cartao_anuncio_widget.dart';
+import 'package:ad_catalog/widgets/descricao_produto_widget.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class ProdutoView extends StatelessWidget {
     print('COMPILANDO TELA DE PRODUTO');
 
     final AnunciosBloc bloc = BlocProvider.getBloc<AnunciosBloc>();
-    bloc.filtrarAnuncios.add(<String, int>{'idProduto': produto.id});
+    bloc.filtrarAnuncios.add(<String, String>{'idProduto': produto.id});
 
     return Scaffold(
       appBar: AppBar(
@@ -25,20 +25,21 @@ class ProdutoView extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            ProdutoWidget.obterDescricao(context, produto),
+            DescricaoProdutoWidget(produto: produto),
             Expanded(
-              child: StreamBuilder(
+              child: StreamBuilder<List>(
                 stream: bloc.obterAnuncios,
                 initialData: [],
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   final estaVisivel = ModalRoute.of(context).isCurrent;
                   print('Tela de produto visivel? ' + (estaVisivel ? 'Sim' : 'Nao'));
-                  if (snapshot.hasData && snapshot.data.length > 0 && estaVisivel) {
+                  if (snapshot.hasData && estaVisivel) {
                     print('Lista de anuncios recebida');
+                    if(snapshot.data.length == 0) return Container(); 
                     return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(child: AnuncioWidget.obterCard(context, snapshot.data[index], produto));
+                        return Container(child: CartaoAnuncioWidget(anuncio: snapshot.data[index], produto: produto));
                       },
                     );
                   }
