@@ -6,7 +6,7 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 
 class SidebarWidget extends StatelessWidget {
-  bool opcoesDeUsuario = false;
+  bool _ultimoEstado = false;
 
   SidebarWidget({Key key}) : super(key: key);
 
@@ -21,9 +21,10 @@ class SidebarWidget extends StatelessWidget {
               child: StreamBuilder(
                 stream:
                     BlocProvider.getBloc<SidebarBloc>().detalhesUsuarioAtivo,
-                initialData: false,
+                initialData: _ultimoEstado,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.data) {
+                  _ultimoEstado = snapshot.data;
+                  if (_ultimoEstado) {
                     return OpcoesUsuarioWidget();
                   }
                   return FiltroCategoriasWidget();

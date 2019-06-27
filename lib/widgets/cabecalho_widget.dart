@@ -1,4 +1,5 @@
 import 'package:ad_catalog/blocs/sidebar_bloc.dart';
+import 'package:ad_catalog/delegates/localizations_deletage.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +25,8 @@ class CabecalhoWidget extends StatelessWidget {
             color: Colors.green,
           ),
         ],
-        accountName: Text('Leandro'),
-        accountEmail: Text('Outras opcoes'),
+        accountName: Text(DemoLocalizations.of(context).hello),
+        accountEmail: Text(DemoLocalizations.of(context).options),
         decoration: BoxDecoration(
             color: Colors.deepOrangeAccent,
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(30))),
