@@ -1,6 +1,6 @@
 import 'package:ad_catalog/blocs/sidebar_bloc.dart';
 import 'package:ad_catalog/widgets/cabecalho_widget.dart';
-import 'package:ad_catalog/widgets/opcoes_usuario_widget.dart';
+import 'package:ad_catalog/widgets/opcoes_widget.dart';
 import 'package:ad_catalog/widgets/filtro_categorias_widget.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class SidebarWidget extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   _ultimoEstado = snapshot.data;
                   if (_ultimoEstado) {
-                    return OpcoesUsuarioWidget();
+                    return OpcoesWidget();
                   }
                   return FiltroCategoriasWidget();
                 },

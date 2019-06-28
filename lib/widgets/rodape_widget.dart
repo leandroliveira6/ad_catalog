@@ -1,7 +1,5 @@
 import 'package:ad_catalog/blocs/localizations_bloc.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:country_pickers/country.dart';
-import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 
 class RodapeWidget extends StatelessWidget {
@@ -10,11 +8,11 @@ class RodapeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.getBloc<LocalizationsBloc>();
-    final idiomas = ['br', 'us', 'es'];
 
     return Container(
+      height: 30,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
             onPressed: () {
@@ -22,8 +20,13 @@ class RodapeWidget extends StatelessWidget {
               Navigator.pop(context);
             },
             padding: EdgeInsets.all(0.0),
-            child: CountryPickerUtils.getDefaultFlagImage(
-              Country.fromMap({'isoCode': idiomas[0]}),
+            child: Container(
+              height: 100,
+              width: 40,
+              child: Image.asset(
+                'imagens/br.png',
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           FlatButton(
@@ -32,8 +35,13 @@ class RodapeWidget extends StatelessWidget {
               Navigator.pop(context);
             },
             padding: EdgeInsets.all(0.0),
-            child: CountryPickerUtils.getDefaultFlagImage(
-              Country.fromMap({'isoCode': idiomas[1]}),
+            child: Container(
+              height: 100,
+              width: 40,
+              child: Image.asset(
+                'imagens/us.png',
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           FlatButton(
@@ -42,8 +50,13 @@ class RodapeWidget extends StatelessWidget {
               Navigator.pop(context);
             },
             padding: EdgeInsets.all(0.0),
-            child: CountryPickerUtils.getDefaultFlagImage(
-              Country.fromMap({'isoCode': idiomas[2]}),
+            child: Container(
+              height: 100,
+              width: 40,
+              child: Image.asset(
+                'imagens/es.png',
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ],

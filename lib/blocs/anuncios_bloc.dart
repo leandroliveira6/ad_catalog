@@ -16,8 +16,12 @@ class AnunciosBloc extends BlocBase {
     print('Instancia de AnunciosBloc criada');
   }
 
-  especificarAnuncios(campo, valor) {
+  void especificarAnuncios(campo, valor) {
     _colecaoAnuncios.where(campo, isEqualTo: valor).getDocuments().then(_criarLista).whenComplete(_enviarLista);
+  }
+
+  void cadastrarAnuncio(formulario){
+
   }
 
   _criarLista(QuerySnapshot qs){

@@ -11,7 +11,7 @@ class AnuncioView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE LOJA');
+    print('COMPILANDO TELA DE ANUNCIO');
 
     return Scaffold(
       appBar: AppBar(

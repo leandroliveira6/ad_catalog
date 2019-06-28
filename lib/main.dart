@@ -3,8 +3,10 @@ import 'package:ad_catalog/blocs/categorias_bloc.dart';
 import 'package:ad_catalog/blocs/localizations_bloc.dart';
 import 'package:ad_catalog/blocs/loja_bloc.dart';
 import 'package:ad_catalog/blocs/marcas_bloc.dart';
+import 'package:ad_catalog/blocs/processamento_bloc.dart';
 import 'package:ad_catalog/blocs/produtos_bloc.dart';
 import 'package:ad_catalog/blocs/sidebar_bloc.dart';
+import 'package:ad_catalog/blocs/usuario_bloc.dart';
 import 'package:ad_catalog/delegates/localizations_deletage.dart';
 import 'package:ad_catalog/views/produtos_view.dart';
 
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
         Bloc((i) => MarcasBloc()),
         Bloc((i) => CategoriasBloc()),
         Bloc((i) => LocalizationsBloc()),
+        Bloc((i) => UsuarioBloc()),
+        Bloc((i) => ProcessamentoBloc()),
       ],
       child: CustomMaterialApp(),
     );
@@ -40,7 +44,7 @@ class CustomMaterialApp extends StatelessWidget {
     final bloc = BlocProvider.getBloc<LocalizationsBloc>();
 
     return StreamBuilder(
-      stream: bloc.obterIdioma,
+      stream: bloc.atualizarIdioma,
       initialData: 'pt',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
@@ -51,7 +55,8 @@ class CustomMaterialApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: bloc.obterIdiomas.map((language) => Locale(language, '')),
+            supportedLocales:
+                bloc.obterIdiomas.map((language) => Locale(language, '')),
             //title: DemoLocalizations.of(context).title,
             onGenerateTitle: (BuildContext context) =>
                 DemoLocalizations.of(context).title,
