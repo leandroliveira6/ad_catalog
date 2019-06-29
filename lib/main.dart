@@ -9,9 +9,8 @@ import 'package:ad_catalog/blocs/opcoes_sidebar_bloc.dart';
 import 'package:ad_catalog/blocs/usuario_bloc.dart';
 import 'package:ad_catalog/delegates/localizations_deletage.dart';
 import 'package:ad_catalog/views/produtos_view.dart';
-
-import 'package:flutter/material.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MyApp());
@@ -31,21 +30,38 @@ class MyApp extends StatelessWidget {
         Bloc((i) => UsuarioBloc()),
         Bloc((i) => ProcessamentoBloc()),
       ],
-      child: CustomMaterialApp(),
+      child: CarregamentoView(),
     );
   }
 }
 
-class CustomMaterialApp extends StatelessWidget {
-  const CustomMaterialApp({Key key}) : super(key: key);
+class CarregamentoView extends StatelessWidget {
+  const CarregamentoView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.getBloc<LocalizationsBloc>();
-    BlocProvider.getBloc<UsuarioBloc>().logar();
+    BlocProvider.getBloc<UsuarioBloc>().carregarUsuario();
+    return Container(
+      child: StreamBuilder(
+        stream: BlocProvider.getBloc<UsuarioBloc>().acompanharCarregamento,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData && snapshot.data == 'carregou') {
+            return CustomMaterialView();
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
 
+class CustomMaterialView extends StatelessWidget {
+  const CustomMaterialView({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.atualizarIdioma,
+      stream: BlocProvider.getBloc<LocalizationsBloc>().atualizarIdioma,
       initialData: 'pt',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
@@ -56,8 +72,9 @@ class CustomMaterialApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales:
-                bloc.obterIdiomas.map((language) => Locale(language, '')),
+            supportedLocales: BlocProvider.getBloc<LocalizationsBloc>()
+                .obterIdiomas
+                .map((language) => Locale(language, '')),
             //title: DemoLocalizations.of(context).title,
             onGenerateTitle: (BuildContext context) =>
                 DemoLocalizations.of(context).title,

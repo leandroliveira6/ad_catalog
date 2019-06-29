@@ -7,13 +7,13 @@ import 'package:rxdart/rxdart.dart';
 
 class LojaBloc extends BlocBase {
   final _lojaController = BehaviorSubject<Loja>();
-  final _lojaParaUsuarioController = BehaviorSubject<Loja>();
+  final _lojaUsuarioController = BehaviorSubject<Loja>();
   final _colecaoLojas = Firestore.instance.collection("lojas");
 
   Loja _loja;
 
   Stream get obterLoja => _lojaController.stream;
-  Stream get obterLojaCadastrada => _lojaParaUsuarioController.stream;
+  Stream get obterLojaUsuario => _lojaUsuarioController.stream;
 
   LojaBloc() {
     print('Instancia de LojaBloc criada');
@@ -45,7 +45,7 @@ class LojaBloc extends BlocBase {
       _loja = Loja(vazia: true);
     }
     if (paraUsuario) {
-      _lojaParaUsuarioController.sink.add(_loja);
+      _lojaUsuarioController.sink.add(_loja);
     } else {
       _lojaController.sink.add(_loja);
     }
@@ -55,7 +55,7 @@ class LojaBloc extends BlocBase {
   @override
   void dispose() {
     _lojaController.close();
-    _lojaParaUsuarioController.close();
+    _lojaUsuarioController.close();
     super.dispose();
   }
 }

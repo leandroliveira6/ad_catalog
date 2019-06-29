@@ -1,67 +1,99 @@
+import 'dart:async';
+
 import 'package:ad_catalog/blocs/loja_bloc.dart';
 import 'package:ad_catalog/blocs/processamento_bloc.dart';
 import 'package:ad_catalog/models/loja.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UsuarioBloc extends BlocBase {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _carregarUsuarioController = BehaviorSubject<String>();
   final _processamentoBloc = BlocProvider.getBloc<ProcessamentoBloc>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   FirebaseUser _firebaseUser;
   Loja _loja;
 
+  Stream get acompanharCarregamento => _carregarUsuarioController.stream;
   Loja get obterLoja => _loja;
 
   UsuarioBloc() {
     print('Instancia de UsuarioBloc criada');
   }
 
-  void logar({email, senha}) {
-    if (email == null && senha == null) {
-      _auth.currentUser().then((usuario) {
-        print(usuario.uid);
+  void carregarUsuario() {
+    _carregarUsuarioController.add('carregando');
+
+    _auth.currentUser().then((usuario) {
+      if (usuario != null) {
+        print('USUARIO BLOC CARREGAMENTO: ${usuario.uid}');
         _firebaseUser = usuario;
-        _receberUsuario(usuario);
-      }, onError: (erro) {
-        print(erro);
-      });
-    } else {
-      _processamentoBloc.atualizarEstadoPara('processando');
-      _auth
-          .signInWithEmailAndPassword(email: email, password: senha)
-          .then(_receberUsuario)
-          .catchError(print);
-    }
+        _receberLoja(usuario.uid, _concluirCarregamento);
+      } else {
+        print('USUARIO BLOC CARREGAMENTO: Nenhum usuario logado');
+        _concluirCarregamento();
+      }
+    }, onError: (erro) {
+      print('USUARIO BLOC CARREGAMENTO: $erro');
+    }).whenComplete(() {
+      print('USUARIO BLOC CARREGAMENTO: Completo');
+    });
+  }
+
+  void logar(email, senha) {
+    _processamentoBloc.atualizarEstadoPara('processando');
+    _auth
+        .signInWithEmailAndPassword(email: email, password: senha)
+        .then((usuario) {
+      _firebaseUser = usuario;
+      _receberLoja(_firebaseUser.uid, _concluirProcessamento);
+    }).catchError(print);
+  }
+
+  void _receberLoja(String id, Function concluir) {
+    final bloc = BlocProvider.getBloc<LojaBloc>();
+    final escuta = bloc.obterLojaUsuario.listen(null);
+    escuta.onData((loja) {
+      print('USUARIO BLOC: Instancia de Loja recebida');
+      if (loja.id == id) {
+        _loja = loja;
+        escuta.cancel();
+        concluir();
+      }
+    });
+    bloc.especificarLoja(id, paraUsuario: true);
+  }
+
+  void _concluirCarregamento() {
+    _carregarUsuarioController.sink.add('carregou');
+  }
+
+  void _concluirProcessamento() {
+    _processamentoBloc.atualizarEstadoPara('concluido');
   }
 
   void cadastrar(email, senha, demaisDados) {
     _processamentoBloc.atualizarEstadoPara('processando');
     _auth
-        .createUserWithEmailAndPassword(email: email, password: senha)
-        .then((usuario) => _receberUsuario(usuario, demaisDados: demaisDados))
-        .catchError(print);
-  }
-
-  void _receberUsuario(usuario, {demaisDados}) {
-    final bloc = BlocProvider.getBloc<LojaBloc>();
-    bloc.obterLojaCadastrada.listen((loja) {
-      print('USUARIO BLOC: Instancia de Loja recebida');
-      _loja = loja;
-      _concluirProcessamento();
-    });
-
-    print('USUARIO BLOC: Usuario recebido');
-    _firebaseUser = usuario;
-
-    if (demaisDados != null) {
-      print('USUARIO BLOC: Cadastrando loja');
+        .createUserWithEmailAndPassword(
+      email: email,
+      password: senha,
+    )
+        .then((usuario) {
+      final bloc = BlocProvider.getBloc<LojaBloc>();
+      final escuta = bloc.obterLojaUsuario.listen(null);
+      escuta.onData((loja) {
+        print('USUARIO BLOC: Instancia de Loja recebida');
+        if (loja.id == usuario.uid) {
+          _loja = loja;
+          escuta.cancel();
+          _concluirProcessamento();
+        }
+      });
+      _firebaseUser = usuario;
       bloc.cadastrarLoja(_firebaseUser.uid, demaisDados);
-    } else {
-      print('USUARIO BLOC: Especificando loja');
-      bloc.especificarLoja(_firebaseUser.uid, paraUsuario: true);
-    }
-    //onAuthStateChanged
+    }).catchError(print);
   }
   /*
   Errors:
@@ -72,10 +104,6 @@ class UsuarioBloc extends BlocBase {
   ERROR_TOO_MANY_REQUESTS - If there was too many attempts to sign in as this user.
   ERROR_OPERATION_NOT_ALLOWED - Indicates that Email & Password accounts are not enabled.
    */
-
-  void _concluirProcessamento() {
-    _processamentoBloc.atualizarEstadoPara('concluido');
-  }
 
   void deslogar() async {
     _processamentoBloc.atualizarEstadoPara('processando');
@@ -98,6 +126,7 @@ class UsuarioBloc extends BlocBase {
 
   @override
   void dispose() {
+    _carregarUsuarioController.close();
     super.dispose();
   }
 }

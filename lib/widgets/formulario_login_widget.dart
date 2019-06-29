@@ -60,8 +60,12 @@ class _FormularioLoginWidgetState extends State<FormularioLoginWidget> {
               ),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                  BlocProvider.getBloc<UsuarioBloc>().logar(email: _emailTextController.text, senha: _senhaTextController.text);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProcessamentoView()));
+                  BlocProvider.getBloc<UsuarioBloc>().logar(
+                      _emailTextController.text, _senhaTextController.text);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProcessamentoView()));
                 }
               },
             )
