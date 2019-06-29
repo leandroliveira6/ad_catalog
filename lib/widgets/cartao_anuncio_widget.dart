@@ -27,8 +27,11 @@ class CartaoAnuncioWidget extends StatelessWidget {
             children: <Widget>[
               Text('Card Anuncio'),
               Text(anuncio.nomeLoja),
+              Text(anuncio.categoria),
+              Text(anuncio.marca),
+              Text(anuncio.modelo),
+              Text(anuncio.valor.toString()),
               Text(anuncio.descricao),
-              Text(anuncio.preco.toString()),
             ],
           ),
         ),

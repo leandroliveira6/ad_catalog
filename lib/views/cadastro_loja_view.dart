@@ -6,17 +6,24 @@ class CadastroLojaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE CADASTRAR LOJA');
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Cadastrar Loja'),
         centerTitle: true,
       ),
-      body: Container(
+      body: _obterCorpo(context),
+    );
+  }
+
+  Widget _obterCorpo(context) {
+    final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+      print('COMPILANDO TELA DE CADASTRAR LOJA');
+      return Container(
         padding: EdgeInsets.all(20),
         child: FormularioCadastroLojaWidget(),
-      ),
-    );
+      );
+    }
+    return Container();
   }
 }

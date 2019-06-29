@@ -8,7 +8,6 @@ class RodapeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.getBloc<LocalizationsBloc>();
-
     return Container(
       height: 30,
       child: Row(

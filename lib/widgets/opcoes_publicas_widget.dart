@@ -6,6 +6,7 @@ class OpcoesPublicasWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('COMPILANDO WIDGET DE OPCOES PUBLICAS');
     return Container(
       color: Colors.cyan,
       child: Column(

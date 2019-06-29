@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:ad_catalog/models/produto.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ProdutosBloc extends BlocBase {
-  final _produtosController = StreamController<List<Produto>>();
+  final _produtosController = BehaviorSubject<List<Produto>>();
   final _colecaoProdutos = Firestore.instance.collection("produtos");
 
   List<Produto> _listaProdutos = [];

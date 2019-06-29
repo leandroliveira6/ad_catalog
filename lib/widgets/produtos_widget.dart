@@ -10,7 +10,6 @@ class ProdutosWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProdutosBloc bloc = BlocProvider.getBloc<ProdutosBloc>();
     bloc.atualizarProdutos();
-
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
       color: Colors.teal,
@@ -18,17 +17,12 @@ class ProdutosWidget extends StatelessWidget {
         stream: bloc.obterProdutos,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.hasData) {
-            final estaVisivel = ModalRoute.of(context).isCurrent;
-            if (estaVisivel) {
-              print('Lista de produtos recebida');
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return CartaoProdutoWidget(produto: snapshot.data[index]);
-                },
-              );
-            }
-            return Container();
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CartaoProdutoWidget(produto: snapshot.data[index]);
+              },
+            );
           }
           return Center(child: CircularProgressIndicator());
         },

@@ -13,13 +13,11 @@ class AnunciosWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.getBloc<AnunciosBloc>();
-    if(produto != null){
+    if (produto != null) {
       bloc.especificarAnuncios('idProduto', produto.id);
-    }
-    else if(loja != null){
+    } else if (loja != null) {
       bloc.especificarAnuncios('idLoja', loja.id);
-    }
-    else{
+    } else {
       bloc.especificarAnuncios('idProduto', -1);
     }
 
@@ -28,20 +26,15 @@ class AnunciosWidget extends StatelessWidget {
         stream: bloc.obterAnuncios,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.hasData) {
-            final estaVisivel = ModalRoute.of(context).isCurrent;
-            if (estaVisivel) {
-              print('Lista de anuncios recebida');
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    child: CartaoAnuncioWidget(
-                        anuncio: snapshot.data[index], produto: produto),
-                  );
-                },
-              );
-            }
-            return Container();
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: CartaoAnuncioWidget(
+                      anuncio: snapshot.data[index]),
+                );
+              },
+            );
           }
           return Center(child: CircularProgressIndicator());
         },

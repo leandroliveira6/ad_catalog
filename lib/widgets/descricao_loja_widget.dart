@@ -7,21 +7,24 @@ class DescricaoLojaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Text('Descricao Loja'),
-          Text('Imagem'),
-          Column(
-            children: <Widget>[
-              //Text(produto.categoria),
-              Text(loja.telefones.toString()),
-              Text(loja.enderecos.toString()),
-              Text(loja.descricao)
-            ],
-          )
-        ],
-      ),
-    );
+    if (!loja.estaVazia()) {
+      return Container(
+        child: Row(
+          children: <Widget>[
+            Text('Descricao Loja'),
+            Text('Imagem'),
+            Column(
+              children: <Widget>[
+                //Text(produto.categoria),
+                Text(loja.telefones.toString()),
+                Text(loja.enderecos.toString()),
+                Text(loja.descricao)
+              ],
+            )
+          ],
+        ),
+      );
+    }
+    return Container();
   }
 }

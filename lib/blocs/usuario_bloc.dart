@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ad_catalog/blocs/loja_bloc.dart';
 import 'package:ad_catalog/blocs/processamento_bloc.dart';
 import 'package:ad_catalog/models/loja.dart';
@@ -7,68 +5,64 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 
 class UsuarioBloc extends BlocBase {
-  //final _usuarioController = StreamController<String>.broadcast();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _processamentoBloc = BlocProvider.getBloc<ProcessamentoBloc>();
 
   FirebaseUser _firebaseUser;
   Loja _loja;
 
-  //Stream get atualizacaoUsuario => _usuarioController.stream;
+  Loja get obterLoja => _loja;
 
   UsuarioBloc() {
     print('Instancia de UsuarioBloc criada');
   }
 
-  void logar(email, senha) async {
-    _processamentoBloc.atualizarEstadoPara('processando');
-    _auth
-        .signInWithEmailAndPassword(email: email, password: senha)
-        .then(_receberUsuario)
-        .catchError(_erroEncontrado)
-        .whenComplete(_concluirProcessamento);
+  void logar({email, senha}) {
+    if (email == null && senha == null) {
+      _auth.currentUser().then((usuario) {
+        print(usuario.uid);
+        _firebaseUser = usuario;
+        _receberUsuario(usuario);
+      }, onError: (erro) {
+        print(erro);
+      });
+    } else {
+      _processamentoBloc.atualizarEstadoPara('processando');
+      _auth
+          .signInWithEmailAndPassword(email: email, password: senha)
+          .then(_receberUsuario)
+          .catchError(print);
+    }
   }
 
-  void cadastrar(email, senha, demaisDados) async {
+  void cadastrar(email, senha, demaisDados) {
     _processamentoBloc.atualizarEstadoPara('processando');
     _auth
         .createUserWithEmailAndPassword(email: email, password: senha)
         .then((usuario) => _receberUsuario(usuario, demaisDados: demaisDados))
-        .catchError(_erroEncontrado);
+        .catchError(print);
   }
 
-  void _receberUsuario(usuario, {demaisDados}) async {
+  void _receberUsuario(usuario, {demaisDados}) {
+    final bloc = BlocProvider.getBloc<LojaBloc>();
+    bloc.obterLojaCadastrada.listen((loja) {
+      print('USUARIO BLOC: Instancia de Loja recebida');
+      _loja = loja;
+      _concluirProcessamento();
+    });
+
+    print('USUARIO BLOC: Usuario recebido');
     _firebaseUser = usuario;
+
     if (demaisDados != null) {
-      final bloc = BlocProvider.getBloc<LojaBloc>();
+      print('USUARIO BLOC: Cadastrando loja');
       bloc.cadastrarLoja(_firebaseUser.uid, demaisDados);
-      final subscription = bloc.obterLoja.listen(null);
-      subscription.onData((loja){
-        print('USUARIO BLOC: Instancia de Loja recebida');
-        _loja = loja;
-        subscription.cancel();
-        _concluirProcessamento();
-      });
-      /*
-      StreamSubscription subscription = bloc.obterLoja.listen(null);
-      subscription.onData((loja){
-        print('Chamou o listen da loja');
-        _loja = loja;
-        subscription.cancel();
-      });
-      */
+    } else {
+      print('USUARIO BLOC: Especificando loja');
+      bloc.especificarLoja(_firebaseUser.uid, paraUsuario: true);
     }
     //onAuthStateChanged
   }
-
-  void _erroEncontrado(erro) {
-    print(erro);
-  }
-
-  void _concluirProcessamento() {
-    _processamentoBloc.atualizarEstadoPara('concluido');
-  }
-
   /*
   Errors:
   ERROR_INVALID_EMAIL - If the [email] address is malformed.
@@ -79,19 +73,31 @@ class UsuarioBloc extends BlocBase {
   ERROR_OPERATION_NOT_ALLOWED - Indicates that Email & Password accounts are not enabled.
    */
 
+  void _concluirProcessamento() {
+    _processamentoBloc.atualizarEstadoPara('concluido');
+  }
+
   void deslogar() async {
     _processamentoBloc.atualizarEstadoPara('processando');
+    print('USUARIO BLOC: Deslogando');
+    _auth.signOut().then((resultado) {
+      print('USUARIO BLOC: Deslogou');
+      _firebaseUser = null;
+      _loja = null;
 
-    Future.delayed(Duration(seconds: 2)).then((resultado) {
-      _processamentoBloc.atualizarEstadoPara('concluido');
+      print('USUARIO BLOC: Concluindo processamento');
+    }).whenComplete(() {
+      _concluirProcessamento();
+      print('USUARIO BLOC: Processamento concluido');
     });
   }
 
-  void obterIdUsuario() {}
+  bool estaLogado() {
+    return _firebaseUser != null;
+  }
 
   @override
   void dispose() {
-    //_usuarioController.close();
     super.dispose();
   }
 }

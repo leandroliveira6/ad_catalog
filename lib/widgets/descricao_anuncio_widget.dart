@@ -14,10 +14,12 @@ class DescricaoAnuncioWidget extends StatelessWidget {
           Text('Imagem'),
           Column(
             children: <Widget>[
-              //Text(produto.categoria),
               Text(anuncio.nomeLoja),
+              Text(anuncio.categoria),
+              Text(anuncio.marca),
+              Text(anuncio.modelo),
+              Text(anuncio.valor.toString()),
               Text(anuncio.descricao),
-              Text(anuncio.preco.toString())
             ],
           )
         ],

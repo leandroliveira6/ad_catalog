@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:rxdart/rxdart.dart';
 
-class SidebarBloc extends BlocBase{
-
-  final _sidebarController = StreamController<bool>.broadcast();
+class OpcoesSidebarBloc extends BlocBase {
+  final _sidebarController = BehaviorSubject<bool>();
   bool _detalhesDoUsuario = false;
 
   Stream get detalhesUsuarioAtivo => _sidebarController.stream;
 
-  SidebarBloc(){
-    print('Instancia de SidebarBloc criada');
+  OpcoesSidebarBloc() {
+    print('Instancia de OpcoesSidebarBloc criada');
   }
 
   void trocarCorpo() {
@@ -19,7 +19,7 @@ class SidebarBloc extends BlocBase{
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _sidebarController.close();
     super.dispose();
   }

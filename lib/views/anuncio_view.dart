@@ -11,19 +11,26 @@ class AnuncioView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE ANUNCIO');
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(anuncio.nomeLoja),
+        title: Text(anuncio.valor.toString()),
+        centerTitle: true,
       ),
-      body: Container(
+      body: _obterCorpo(context),
+    );
+  }
+
+  Widget _obterCorpo(context) {
+    final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+      print('COMPILANDO TELA DE ANUNCIO');
+      return Container(
         padding: EdgeInsets.all(10),
         child: AnuncioWidget(
-          produto: produto,
           anuncio: anuncio,
         ),
-      ),
-    );
+      );
+    }
+    return Container();
   }
 }

@@ -1,23 +1,37 @@
-
+import 'package:ad_catalog/blocs/usuario_bloc.dart';
+import 'package:ad_catalog/views/cadastro_anuncio_view.dart';
+import 'package:ad_catalog/widgets/anuncios_widget.dart';
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 
-class ProdutosView extends StatelessWidget {
+class AnunciosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE ANUNCIOS');
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Anuncios'),
+        centerTitle: true,
       ),
-      body: Container(
-        child: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) {
-          return Text('Quallquer coisa $index');
-         },
-        ),
+      body: _obterCorpo(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.playlist_add),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CadastroAnuncioView()));
+        },
       ),
     );
+  }
+
+  Widget _obterCorpo(context) {
+    final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+      print('COMPILANDO TELA DE ANUNCIOS');
+      final loja = BlocProvider.getBloc<UsuarioBloc>().obterLoja;
+      return Container(
+        child: AnunciosWidget(loja: loja),
+      );
+    }
+    return Container();
   }
 }

@@ -1,4 +1,5 @@
-import 'package:ad_catalog/blocs/sidebar_bloc.dart';
+import 'package:ad_catalog/blocs/opcoes_sidebar_bloc.dart';
+import 'package:ad_catalog/blocs/usuario_bloc.dart';
 import 'package:ad_catalog/delegates/localizations_deletage.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,14 @@ class CabecalhoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.getBloc<UsuarioBloc>();
+    final nomeLoja = bloc.estaLogado == true ? ', ${bloc.obterLoja.nome}' : '';
+    final emailLoja = bloc.estaLogado == true ? '${bloc.obterLoja.email}' : '';
+
     return Container(
       child: UserAccountsDrawerHeader(
         onDetailsPressed: () {
-          BlocProvider.getBloc<SidebarBloc>().trocarCorpo();
+          BlocProvider.getBloc<OpcoesSidebarBloc>().trocarCorpo();
         },
         currentAccountPicture: CircleAvatar(
           child: Icon(
@@ -25,7 +30,7 @@ class CabecalhoWidget extends StatelessWidget {
             color: Colors.green,
           ),
         ],
-        accountName: Text(DemoLocalizations.of(context).hello),
+        accountName: Text('${DemoLocalizations.of(context).hello}' + nomeLoja),
         accountEmail: Text(DemoLocalizations.of(context).options),
         decoration: BoxDecoration(
             color: Colors.deepOrangeAccent,

@@ -5,7 +5,7 @@ import 'package:ad_catalog/blocs/loja_bloc.dart';
 import 'package:ad_catalog/blocs/marcas_bloc.dart';
 import 'package:ad_catalog/blocs/processamento_bloc.dart';
 import 'package:ad_catalog/blocs/produtos_bloc.dart';
-import 'package:ad_catalog/blocs/sidebar_bloc.dart';
+import 'package:ad_catalog/blocs/opcoes_sidebar_bloc.dart';
 import 'package:ad_catalog/blocs/usuario_bloc.dart';
 import 'package:ad_catalog/delegates/localizations_deletage.dart';
 import 'package:ad_catalog/views/produtos_view.dart';
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => ProdutosBloc()),
         Bloc((i) => AnunciosBloc()),
         Bloc((i) => LojaBloc()),
-        Bloc((i) => SidebarBloc()),
+        Bloc((i) => OpcoesSidebarBloc()),
         Bloc((i) => MarcasBloc()),
         Bloc((i) => CategoriasBloc()),
         Bloc((i) => LocalizationsBloc()),
@@ -42,6 +42,7 @@ class CustomMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.getBloc<LocalizationsBloc>();
+    BlocProvider.getBloc<UsuarioBloc>().logar();
 
     return StreamBuilder(
       stream: bloc.atualizarIdioma,

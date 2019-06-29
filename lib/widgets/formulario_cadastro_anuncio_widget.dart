@@ -7,11 +7,18 @@ import 'package:flutter/material.dart';
 class FormularioCadastroAnuncioWidget extends StatefulWidget {
   FormularioCadastroAnuncioWidget({Key key}) : super(key: key);
 
-  _FormularioCadastroAnuncioWidgetState createState() => _FormularioCadastroAnuncioWidgetState();
+  _FormularioCadastroAnuncioWidgetState createState() =>
+      _FormularioCadastroAnuncioWidgetState();
 }
 
-class _FormularioCadastroAnuncioWidgetState extends State<FormularioCadastroAnuncioWidget> {
+class _FormularioCadastroAnuncioWidgetState
+    extends State<FormularioCadastroAnuncioWidget> {
   final _formKey = GlobalKey<FormState>();
+  final _categoriaTextController = TextEditingController();
+  final _marcaTextController = TextEditingController();
+  final _modeloTextController = TextEditingController();
+  final _valorTextController = TextEditingController();
+  final _descricaoTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,65 +28,67 @@ class _FormularioCadastroAnuncioWidgetState extends State<FormularioCadastroAnun
         child: ListView(
           children: <Widget>[
             TextFormField(
-              decoration: InputDecoration(hintText: 'Nome'),
+              controller: _categoriaTextController,
+              decoration: InputDecoration(hintText: 'Categoria'),
               keyboardType: TextInputType.text,
               validator: (nome) {
                 if (nome.isEmpty || nome.length < 3) return 'Campo obrigatorio';
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             TextFormField(
-              decoration: InputDecoration(hintText: 'Usuario'),
+              controller: _marcaTextController,
+              decoration: InputDecoration(hintText: 'Marca'),
               keyboardType: TextInputType.text,
-              validator: (usuario) {
-                if (usuario.isEmpty || usuario.length < 3)
-                  return 'Campo obrigatorio';
+              validator: (nome) {
+                if (nome.isEmpty || nome.length < 3) return 'Campo obrigatorio';
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             TextFormField(
-              decoration: InputDecoration(hintText: 'Senha'),
+              controller: _modeloTextController,
+              decoration: InputDecoration(hintText: 'Modelo'),
               keyboardType: TextInputType.text,
-              obscureText: true,
-              validator: (senha) {
-                if (senha.isEmpty || senha.length < 3)
-                  return 'Campo obrigatorio';
+              validator: (nome) {
+                if (nome.isEmpty || nome.length < 3) return 'Campo obrigatorio';
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             TextFormField(
-              decoration: InputDecoration(hintText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-              validator: (email) {
-                if (email.isEmpty || email.length < 3)
-                  return 'Campo obrigatorio';
+              controller: _valorTextController,
+              decoration: InputDecoration(hintText: 'Valor'),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              validator: (valor) {
+                if (valor.isEmpty) return 'Campo obrigatorio';
+                if(double.tryParse(valor) == null) return 'O valor deve conter no maximo 1 ponto.';
               },
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             TextFormField(
+              controller: _descricaoTextController,
               decoration: InputDecoration(hintText: 'Descricao'),
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.multiline,
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             RaisedButton(
-              child: Text(
-                'Salvar',
-              ),
+              child: Text('Salvar'),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                  final usuario = BlocProvider.getBloc<UsuarioBloc>().obterIdUsuario();
-                  BlocProvider.getBloc<AnunciosBloc>().cadastrarAnuncio({});
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProcessamentoView()));
+                  final loja = BlocProvider.getBloc<UsuarioBloc>().obterLoja;
+
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProcessamentoView()));
+                  BlocProvider.getBloc<AnunciosBloc>().cadastrarAnuncio({
+                    'idLoja': loja.id,
+                    'nomeLoja': loja.nome,
+                    'categoria': _categoriaTextController.text,
+                    'marca': _marcaTextController.text,
+                    'modelo': _modeloTextController.text,
+                    'valor': double.parse(_valorTextController.text.replaceFirst(',', '.')),
+                    'descricao': _descricaoTextController.text,
+                  });
                 }
               },
             )

@@ -7,22 +7,35 @@ import 'package:flutter/material.dart';
 class ProdutosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE PRODUTOS');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(DemoLocalizations.of(context).title),
+        centerTitle: true,
       ),
       drawer: SidebarWidget(),
-      body: Container(
-        //padding: EdgeInsets.only(10),
+      body: _obterCorpo(context),
+    );
+  }
+
+  Widget _obterCorpo(context) {
+    final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+      print('COMPILANDO TELA DE PRODUTOS');
+      return Container(
         child: Column(
           children: <Widget>[
             FiltroMarcasWidget(),
             Expanded(child: ProdutosWidget()),
           ],
         ),
-      ),
-    );
+      );
+    }
+    return Container();
   }
 }
+/*
+final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+    }
+    return Container();
+ */

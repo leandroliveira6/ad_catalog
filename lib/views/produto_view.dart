@@ -10,13 +10,20 @@ class ProdutoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('COMPILANDO TELA DE PRODUTO');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(produto.categoria),
+        centerTitle: true,
       ),
-      body: Container(
+      body: _obterCorpo(context),
+    );
+  }
+
+  Widget _obterCorpo(context) {
+    final estaVisivel = ModalRoute.of(context).isCurrent;
+    if (estaVisivel) {
+      print('COMPILANDO TELA DE PRODUTO');
+      return Container(
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
@@ -26,7 +33,8 @@ class ProdutoView extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+    }
+    return Container();
   }
 }

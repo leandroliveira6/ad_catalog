@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:ad_catalog/blocs/produtos_bloc.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MarcasBloc extends BlocBase {
-  final _marcasController = StreamController<List<Map<String, bool>>>();
+  final _marcasController = BehaviorSubject<List<Map<String, bool>>>();
   final _colecaoMarcas = Firestore.instance.collection("marcas");
 
   List<Map<String, bool>> _marcas = [];
@@ -17,7 +18,7 @@ class MarcasBloc extends BlocBase {
     print('Instancia de MarcasBloc criada');
   }
 
-  void alternarFiltros(filtro) {
+  void alternarFiltros(String filtro) {
     if (_filtrosAtivos.contains(filtro)) {
       _filtrosAtivos.remove(filtro);
     } else {

@@ -1,6 +1,6 @@
 import 'package:ad_catalog/blocs/usuario_bloc.dart';
+import 'package:ad_catalog/views/anuncios_view.dart';
 import 'package:ad_catalog/views/processamento_view.dart';
-import 'package:ad_catalog/widgets/anuncios_widget.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,7 @@ class OpcoesPrivadasWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('COMPILANDO WIDGET DE OPCOES PRIVADAS');
     return Container(
       color: Colors.cyan,
       child: Column(
@@ -25,7 +26,7 @@ class OpcoesPrivadasWidget extends StatelessWidget {
             title: Text("Anuncios"),
             trailing: Icon(Icons.arrow_forward),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AnunciosWidget()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AnunciosView()));
             },
           ),
         ],
