@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:ad_catalog/blocs/processamento_bloc.dart';
 import 'package:ad_catalog/models/anuncio.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AnunciosBloc extends BlocBase {

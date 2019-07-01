@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ad_catalog/blocs/produtos_bloc.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

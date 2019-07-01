@@ -25,12 +25,12 @@ class CartaoProdutoWidget extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: Row(
               children: <Widget>[
-                // CircleAvatar(
-                //   backgroundImage: produto.imagemUrl != null
-                //       ? NetworkImage(produto.imagemUrl)
-                //       : AssetImage("imagens/sem_foto.gif"),
-                //   radius: 40,
-                // ),
+                CircleAvatar(
+                  backgroundImage: produto.imagemUrl != null
+                      ? NetworkImage(produto.imagemUrl)
+                      : AssetImage("imagens/sem_foto.gif"),
+                  radius: 40,
+                ),
                 Expanded(
                   child: ListTile(
                     title: Text('${produto.categoria} ${produto.marca}'),

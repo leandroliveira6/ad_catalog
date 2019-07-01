@@ -1,12 +1,9 @@
-
-
 import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ImagemBloc extends BlocBase {
   final _imagemController = StreamController<String>.broadcast();
