@@ -1,12 +1,11 @@
 import 'package:ad_catalog/models/anuncio.dart';
-import 'package:ad_catalog/models/produto.dart';
 import 'package:ad_catalog/views/anuncio_view.dart';
 import 'package:flutter/material.dart';
 
 class CartaoAnuncioWidget extends StatelessWidget {
   final Anuncio anuncio;
-  final Produto produto;
-  const CartaoAnuncioWidget({Key key, this.anuncio, this.produto})
+  final bool editavel;
+  const CartaoAnuncioWidget({Key key, this.anuncio, this.editavel = false})
       : super(key: key);
 
   @override
@@ -18,21 +17,39 @@ class CartaoAnuncioWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  AnuncioView(anuncio: anuncio, produto: produto),
+                  AnuncioView(anuncio: anuncio, editavel: editavel),
             ),
           );
         },
         child: Card(
-          child: Column(
-            children: <Widget>[
-              Text('Card Anuncio'),
-              Text(anuncio.nomeLoja),
-              Text(anuncio.categoria),
-              Text(anuncio.marca),
-              Text(anuncio.modelo),
-              Text(anuncio.valor.toString()),
-              Text(anuncio.descricao),
-            ],
+          color: Theme.of(context).cardColor,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage: anuncio.imagemUrl != null
+                      ? NetworkImage(anuncio.imagemUrl)
+                      : AssetImage("imagens/sem_foto.gif"),
+                  radius: 40,
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: editavel == true
+                        ? Text('${anuncio.categoria} ${anuncio.marca}')
+                        : Text('${anuncio.nomeLoja}'),
+                    subtitle: editavel == true
+                        ? Text('${anuncio.modelo}')
+                        : Text(
+                            '${anuncio.descricao}',
+                            maxLines: 3,
+                          ),
+                    trailing: Text('R\$ ${anuncio.valor.toString()}',
+                        style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

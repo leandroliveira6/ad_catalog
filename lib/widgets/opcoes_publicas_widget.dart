@@ -8,15 +8,21 @@ class OpcoesPublicasWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('COMPILANDO WIDGET DE OPCOES PUBLICAS');
     return Container(
-      color: Colors.cyan,
-      child: Column(
+      child: ListView(
         children: <Widget>[
-          ListTile(
-            title: Text("Login"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginView()));
-            },
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: ListTile(
+              title: Text("Login",
+                  style: TextStyle(fontSize: 20, color: Colors.black54)),
+              trailing: Icon(Icons.arrow_forward),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginView()));
+              },
+            ),
           ),
         ],
       ),

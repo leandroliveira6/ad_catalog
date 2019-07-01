@@ -20,13 +20,26 @@ class FiltroCategoriasWidget extends StatelessWidget {
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 final filtro = snapshot.data[index].keys.first.toString();
-                return ListTile(
-                  title: Text(filtro),
-                  selected: snapshot.data[index][filtro],
-                  onTap: () {
-                    bloc.alternarFiltros(filtro);
-                    Navigator.pop(context);
-                  },
+                return Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: snapshot.data[index][filtro]
+                            ? Theme.of(context).primaryColorDark
+                            : Theme.of(context).primaryColorLight),
+                    child: ListTile(
+                      title: Text(filtro,
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.black54)),
+                      selected: snapshot.data[index][filtro],
+                      trailing: Icon(Icons.filter_list),
+                      onTap: () {
+                        bloc.alternarFiltros(filtro);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 );
               },
             );

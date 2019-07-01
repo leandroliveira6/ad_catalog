@@ -15,31 +15,28 @@ class OpcoesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('COMPILANDO WIDGET DE OPCOES');
     return Container(
-      color: Colors.teal,
+      color: Theme.of(context).primaryColorLight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: StreamBuilder(
-                stream: BlocProvider.getBloc<OpcoesSidebarBloc>()
-                    .detalhesUsuarioAtivo,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    _opcoesAtivadas = snapshot.data;
+            child: StreamBuilder(
+              stream: BlocProvider.getBloc<OpcoesSidebarBloc>()
+                  .detalhesUsuarioAtivo,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  _opcoesAtivadas = snapshot.data;
+                }
+                if (_opcoesAtivadas) {
+                  final bloc = BlocProvider.getBloc<UsuarioBloc>();
+                  if (bloc.estaLogado()) {
+                    return OpcoesPrivadasWidget();
+                  } else {
+                    return OpcoesPublicasWidget();
                   }
-                  if (_opcoesAtivadas) {
-                    final bloc = BlocProvider.getBloc<UsuarioBloc>();
-                    if (bloc.estaLogado()) {
-                      return OpcoesPrivadasWidget();
-                    } else {
-                      return OpcoesPublicasWidget();
-                    }
-                  }
-                  return FiltroCategoriasWidget();
-                },
-              ),
+                }
+                return FiltroCategoriasWidget();
+              },
             ),
           ),
           RodapeWidget(),

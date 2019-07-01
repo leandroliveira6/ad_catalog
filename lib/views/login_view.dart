@@ -32,6 +32,7 @@ class LoginView extends StatelessWidget {
     if (estaVisivel) {
       print('COMPILANDO TELA DE LOGIN');
       return Container(
+        color: Theme.of(context).backgroundColor,
         padding: EdgeInsets.all(20),
         child: FormularioLoginWidget(),
       );

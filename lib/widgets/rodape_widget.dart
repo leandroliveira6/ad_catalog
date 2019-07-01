@@ -10,6 +10,7 @@ class RodapeWidget extends StatelessWidget {
     final bloc = BlocProvider.getBloc<LocalizationsBloc>();
     return Container(
       height: 30,
+      padding: EdgeInsets.only(bottom: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -18,7 +19,6 @@ class RodapeWidget extends StatelessWidget {
               bloc.alterarIdiomaPara('pt');
               Navigator.pop(context);
             },
-            padding: EdgeInsets.all(0.0),
             child: Container(
               height: 100,
               width: 40,
@@ -33,7 +33,6 @@ class RodapeWidget extends StatelessWidget {
               bloc.alterarIdiomaPara('en');
               Navigator.pop(context);
             },
-            padding: EdgeInsets.all(0.0),
             child: Container(
               height: 100,
               width: 40,
@@ -48,7 +47,6 @@ class RodapeWidget extends StatelessWidget {
               bloc.alterarIdiomaPara('es');
               Navigator.pop(context);
             },
-            padding: EdgeInsets.all(0.0),
             child: Container(
               height: 100,
               width: 40,

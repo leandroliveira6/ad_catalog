@@ -3,23 +3,22 @@ class Loja {
   final nome;
   final email;
   final imagemUrl;
-  final telefones;
-  final enderecos;
+  final telefone;
+  final endereco;
   final descricao;
   bool vazia;
 
-  Loja({
-    this.id,
-    this.nome,
-    this.email,
-    this.imagemUrl,
-    this.telefones,
-    this.enderecos,
-    this.descricao,
-    this.vazia = false
-  });
+  Loja(
+      {this.id,
+      this.nome,
+      this.email,
+      this.imagemUrl,
+      this.telefone,
+      this.endereco,
+      this.descricao,
+      this.vazia = false});
 
-  bool estaVazia(){
+  bool estaVazia() {
     return vazia;
   }
 
@@ -30,8 +29,8 @@ class Loja {
       nome: json[chave]['nome'],
       email: json[chave]['email'],
       imagemUrl: json[chave]['imagemUrl'],
-      telefones: json[chave]['telefones'],
-      enderecos: json[chave]['enderecos'],
+      telefone: json[chave]['telefone'],
+      endereco: json[chave]['endereco'],
       descricao: json[chave]['descricao'],
     );
   }
@@ -42,8 +41,8 @@ class Loja {
         'nome': nome,
         'email': email,
         'imagemUrl': imagemUrl,
-        'telefones': telefones,
-        'enderecos': enderecos,
+        'telefone': telefone,
+        'endereco': endereco,
         'descricao': descricao,
       }
     };

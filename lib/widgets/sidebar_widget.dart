@@ -8,6 +8,7 @@ class SidebarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Drawer(
         child: Column(
           children: <Widget>[

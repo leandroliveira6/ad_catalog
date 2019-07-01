@@ -8,6 +8,7 @@ class Anuncio {
   final descricao;
   final valor;
   final nomeLoja;
+  final imagemUrl;
 
   Anuncio(
       {this.id,
@@ -18,7 +19,8 @@ class Anuncio {
       this.modelo,
       this.descricao,
       this.valor,
-      this.nomeLoja});
+      this.nomeLoja,
+      this.imagemUrl});
 
   factory Anuncio.fromJson(Map<String, dynamic> json) {
     final chave = json.keys.first;
@@ -32,6 +34,7 @@ class Anuncio {
       descricao: json[chave]['descricao'],
       valor: json[chave]['valor'],
       nomeLoja: json[chave]['nomeLoja'],
+      imagemUrl: json[chave]['imagemUrl'],
     );
   }
 
@@ -45,7 +48,8 @@ class Anuncio {
         'modelo': modelo,
         'descricao': descricao,
         'valor': valor,
-        'nomeLoja': nomeLoja
+        'nomeLoja': nomeLoja,
+        'imagemUrl': imagemUrl
       }
     };
   }

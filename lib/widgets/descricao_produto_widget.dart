@@ -10,17 +10,24 @@ class DescricaoProdutoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(5),
+      height: 200,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Descricao Produto'),
-          Text('Imagem'),
-          Column(
-            children: <Widget>[
-              //Text(produto.categoria),
-              Text(produto.marca),
-              Text(produto.modelo),
-            ],
-          )
+          produto.imagemUrl != null
+              ? Image.network(produto.imagemUrl,
+                  width: MediaQuery.of(context).size.width * 4.64 / 10,
+                  fit: BoxFit.cover)
+              : Image.asset("imagens/sem_foto.gif",
+                  width: MediaQuery.of(context).size.width * 4.64 / 10,
+                  fit: BoxFit.cover),
+          Expanded(
+            child: ListTile(
+              title: Text('${produto.categoria} ${produto.marca}'),
+              subtitle: Text('${produto.modelo}'),
+            ),
+          ),
         ],
       ),
     );

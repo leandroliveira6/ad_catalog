@@ -12,7 +12,7 @@ class ProdutoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(produto.categoria),
+        title: Text('Produto'),
         centerTitle: true,
       ),
       body: _obterCorpo(context),
@@ -24,6 +24,7 @@ class ProdutoView extends StatelessWidget {
     if (estaVisivel) {
       print('COMPILANDO TELA DE PRODUTO');
       return Container(
+        color: Theme.of(context).backgroundColor,
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[

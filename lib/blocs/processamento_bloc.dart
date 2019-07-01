@@ -7,8 +7,7 @@ class ProcessamentoBloc extends BlocBase {
   final _processamentoController = BehaviorSubject<String>();
   String _estadoCorrente = 'pronto';
 
-  Stream get obterEstadoFuturo => _processamentoController.stream;
-  String get obterEstado => _estadoCorrente;
+  Stream get obterEstado => _processamentoController.stream;
 
   ProcessamentoBloc() {
     print('Instancia de ProcessamentoBloc criada');

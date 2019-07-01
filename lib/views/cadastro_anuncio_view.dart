@@ -2,7 +2,10 @@ import 'package:ad_catalog/widgets/formulario_cadastro_anuncio_widget.dart';
 import 'package:flutter/material.dart';
 
 class CadastroAnuncioView extends StatelessWidget {
-  CadastroAnuncioView({Key key}) : super(key: key);
+  final anuncio;
+  final editar;
+  CadastroAnuncioView({Key key, this.anuncio, this.editar = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,10 @@ class CadastroAnuncioView extends StatelessWidget {
     if (estaVisivel) {
       print('COMPILANDO TELA DE CADASTRAR ANUNCIO');
       return Container(
+        color: Theme.of(context).backgroundColor,
         padding: EdgeInsets.all(20),
-        child: FormularioCadastroAnuncioWidget(),
+        child:
+            FormularioCadastroAnuncioWidget(anuncio: anuncio, editar: editar),
       );
     }
     return Container();

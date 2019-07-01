@@ -12,7 +12,6 @@ class ProdutosWidget extends StatelessWidget {
     bloc.atualizarProdutos();
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-      color: Colors.teal,
       child: StreamBuilder<List>(
         stream: bloc.obterProdutos,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {

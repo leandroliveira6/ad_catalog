@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 class AnunciosWidget extends StatelessWidget {
   final Produto produto;
   final Loja loja;
-  const AnunciosWidget({Key key, this.produto, this.loja}) : super(key: key);
+  final bool editavel;
+
+  const AnunciosWidget({Key key, this.produto, this.loja, this.editavel = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class AnunciosWidget extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: CartaoAnuncioWidget(
-                      anuncio: snapshot.data[index]),
+                      anuncio: snapshot.data[index], editavel: editavel),
                 );
               },
             );

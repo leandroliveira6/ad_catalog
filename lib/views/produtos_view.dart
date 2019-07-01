@@ -22,6 +22,7 @@ class ProdutosView extends StatelessWidget {
     if (estaVisivel) {
       print('COMPILANDO TELA DE PRODUTOS');
       return Container(
+        color: Theme.of(context).backgroundColor,
         child: Column(
           children: <Widget>[
             FiltroMarcasWidget(),

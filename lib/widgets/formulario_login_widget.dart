@@ -25,22 +25,23 @@ class _FormularioLoginWidgetState extends State<FormularioLoginWidget> {
               controller: _emailTextController,
               decoration: InputDecoration(hintText: 'Email'),
               keyboardType: TextInputType.emailAddress,
-              validator: (usuario) {
-                if (usuario.isEmpty || usuario.length < 6)
-                  return 'Campo obrigatorio e com no minimo 6 caracteres';
+              validator: (email) {
+                if (email.isEmpty) return 'Campo obrigatorio';
               },
             ),
             SizedBox(
               height: 10,
             ),
             TextFormField(
+              maxLength: 18,
               controller: _senhaTextController,
               decoration: InputDecoration(hintText: 'Senha'),
               keyboardType: TextInputType.text,
               obscureText: true,
               validator: (senha) {
-                if (senha.isEmpty || senha.length < 6)
-                  return 'Campo obrigatorio e com no minimo 6 caracteres';
+                if (senha.isEmpty) return 'Campo obrigatorio';
+                if (senha.length < 6 && senha.length > 18)
+                  return 'Esse campo so pode ter entre 6 e 18 caracteres';
               },
             ),
             Align(
@@ -48,16 +49,32 @@ class _FormularioLoginWidgetState extends State<FormularioLoginWidget> {
               child: FlatButton(
                 padding: EdgeInsets.zero,
                 child: Text('Recuperar senha'),
-                onPressed: () {},
+                onPressed: () {
+                  if (_emailTextController.text.isEmpty ||
+                      !_emailTextController.text.contains('@') ||
+                      !_emailTextController.text.contains('.')) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text('Insira um email valido para recuperacao'),
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 2),
+                    ));
+                  } else {
+                    BlocProvider.getBloc<UsuarioBloc>()
+                        .recuperarSenha(_emailTextController.text);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProcessamentoView()));
+                  }
+                },
               ),
             ),
             SizedBox(
               height: 10,
             ),
             RaisedButton(
-              child: Text(
-                'Entrar',
-              ),
+              color: Theme.of(context).primaryColor,
+              child: Text('Entrar', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   BlocProvider.getBloc<UsuarioBloc>().logar(

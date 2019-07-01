@@ -14,6 +14,7 @@ class AnunciosView extends StatelessWidget {
       ),
       body: _obterCorpo(context),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
         child: Icon(Icons.playlist_add),
         onPressed: () {
           Navigator.push(context,
@@ -29,7 +30,8 @@ class AnunciosView extends StatelessWidget {
       print('COMPILANDO TELA DE ANUNCIOS');
       final loja = BlocProvider.getBloc<UsuarioBloc>().obterLoja;
       return Container(
-        child: AnunciosWidget(loja: loja),
+        color: Theme.of(context).backgroundColor,
+        child: AnunciosWidget(loja: loja, editavel: true),
       );
     }
     return Container();

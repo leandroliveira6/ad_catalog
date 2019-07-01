@@ -16,7 +16,12 @@ class UsuarioBloc extends BlocBase {
   Loja _loja;
 
   Stream get acompanharCarregamento => _carregarUsuarioController.stream;
-  Loja get obterLoja => _loja;
+  Loja get obterLoja {
+    return _loja != null ? _loja : Loja(vazia: true);
+  }
+  set atualizarLoja(novaLoja) {
+    _loja = novaLoja;
+  }
 
   UsuarioBloc() {
     print('Instancia de UsuarioBloc criada');
@@ -27,35 +32,37 @@ class UsuarioBloc extends BlocBase {
 
     _auth.currentUser().then((usuario) {
       if (usuario != null) {
-        print('USUARIO BLOC CARREGAMENTO: ${usuario.uid}');
+        //print('USUARIO BLOC CARREGAMENTO: ${usuario.uid}');
         _firebaseUser = usuario;
         _receberLoja(usuario.uid, _concluirCarregamento);
       } else {
-        print('USUARIO BLOC CARREGAMENTO: Nenhum usuario logado');
+        //print('USUARIO BLOC CARREGAMENTO: Nenhum usuario logado');
         _concluirCarregamento();
       }
     }, onError: (erro) {
-      print('USUARIO BLOC CARREGAMENTO: $erro');
+      print('Erro no carregamento?');
+      _concluirCarregamento();
+      //print('USUARIO BLOC CARREGAMENTO: $erro');
     }).whenComplete(() {
-      print('USUARIO BLOC CARREGAMENTO: Completo');
+      //print('USUARIO BLOC CARREGAMENTO: Completo');
     });
   }
 
   void logar(email, senha) {
-    _processamentoBloc.atualizarEstadoPara('processando');
+    _iniciarProcessamento();
     _auth
         .signInWithEmailAndPassword(email: email, password: senha)
         .then((usuario) {
       _firebaseUser = usuario;
       _receberLoja(_firebaseUser.uid, _concluirProcessamento);
-    }).catchError(print);
+    }).catchError(_concluirComErros);
   }
 
   void _receberLoja(String id, Function concluir) {
     final bloc = BlocProvider.getBloc<LojaBloc>();
     final escuta = bloc.obterLojaUsuario.listen(null);
     escuta.onData((loja) {
-      print('USUARIO BLOC: Instancia de Loja recebida');
+      //print('USUARIO BLOC: Instancia de Loja recebida');
       if (loja.id == id) {
         _loja = loja;
         escuta.cancel();
@@ -65,8 +72,17 @@ class UsuarioBloc extends BlocBase {
     bloc.especificarLoja(id, paraUsuario: true);
   }
 
+  void _iniciarProcessamento() {
+    _processamentoBloc.atualizarEstadoPara('processando');
+  }
+
   void _concluirCarregamento() {
     _carregarUsuarioController.sink.add('carregou');
+  }
+
+  void _concluirComErros(erro) {
+    print(erro);
+    _processamentoBloc.atualizarEstadoPara('concluidoComErros');
   }
 
   void _concluirProcessamento() {
@@ -74,7 +90,7 @@ class UsuarioBloc extends BlocBase {
   }
 
   void cadastrar(email, senha, demaisDados) {
-    _processamentoBloc.atualizarEstadoPara('processando');
+    _iniciarProcessamento();
     _auth
         .createUserWithEmailAndPassword(
       email: email,
@@ -84,7 +100,7 @@ class UsuarioBloc extends BlocBase {
       final bloc = BlocProvider.getBloc<LojaBloc>();
       final escuta = bloc.obterLojaUsuario.listen(null);
       escuta.onData((loja) {
-        print('USUARIO BLOC: Instancia de Loja recebida');
+        //print('USUARIO BLOC: Instancia de Loja recebida');
         if (loja.id == usuario.uid) {
           _loja = loja;
           escuta.cancel();
@@ -93,7 +109,7 @@ class UsuarioBloc extends BlocBase {
       });
       _firebaseUser = usuario;
       bloc.cadastrarLoja(_firebaseUser.uid, demaisDados);
-    }).catchError(print);
+    }).catchError(_concluirComErros);
   }
   /*
   Errors:
@@ -106,22 +122,30 @@ class UsuarioBloc extends BlocBase {
    */
 
   void deslogar() async {
-    _processamentoBloc.atualizarEstadoPara('processando');
-    print('USUARIO BLOC: Deslogando');
+    _iniciarProcessamento();
+    //print('USUARIO BLOC: Deslogando');
     _auth.signOut().then((resultado) {
-      print('USUARIO BLOC: Deslogou');
+      //print('USUARIO BLOC: Deslogou');
       _firebaseUser = null;
       _loja = null;
 
-      print('USUARIO BLOC: Concluindo processamento');
+      //print('USUARIO BLOC: Concluindo processamento');
     }).whenComplete(() {
       _concluirProcessamento();
-      print('USUARIO BLOC: Processamento concluido');
+      //print('USUARIO BLOC: Processamento concluido');
     });
   }
 
   bool estaLogado() {
     return _firebaseUser != null;
+  }
+
+  void recuperarSenha(email) {
+    _iniciarProcessamento();
+    _auth
+        .sendPasswordResetEmail(email: email)
+        .then((resultado) => _concluirProcessamento())
+        .catchError(_concluirComErros);
   }
 
   @override

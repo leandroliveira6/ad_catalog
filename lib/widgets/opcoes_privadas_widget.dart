@@ -1,5 +1,6 @@
 import 'package:ad_catalog/blocs/usuario_bloc.dart';
 import 'package:ad_catalog/views/anuncios_view.dart';
+import 'package:ad_catalog/views/cadastro_loja_view.dart';
 import 'package:ad_catalog/views/processamento_view.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
@@ -11,24 +12,56 @@ class OpcoesPrivadasWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('COMPILANDO WIDGET DE OPCOES PRIVADAS');
     return Container(
-      color: Colors.cyan,
+      padding: EdgeInsets.only(top: 24),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          ListTile(
-            title: Text("Logout"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () {
-              BlocProvider.getBloc<UsuarioBloc>().deslogar();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ProcessamentoView()));
-            },
+          Padding(
+            padding: const EdgeInsets.all(2),
+            child: ListTile(
+              title: Text("Anuncios",
+                  style: TextStyle(fontSize: 20, color: Colors.black54)),
+              trailing: Icon(Icons.list),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AnunciosView()));
+              },
+            ),
           ),
-          ListTile(
-            title: Text("Anuncios"),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AnunciosView()));
-            },
-          ),
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(2),
+                child: ListTile(
+                  title: Text("Editar Loja",
+                      style: TextStyle(fontSize: 20, color: Colors.black54)),
+                  trailing: Icon(Icons.edit),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CadastroLojaView(editar: true)));
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2),
+                child: ListTile(
+                  title: Text("Logout",
+                      style: TextStyle(fontSize: 20, color: Colors.black54)),
+                  trailing: Icon(Icons.exit_to_app),
+                  onTap: () {
+                    BlocProvider.getBloc<UsuarioBloc>().deslogar();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProcessamentoView()));
+                  },
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

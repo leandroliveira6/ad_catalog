@@ -26,8 +26,8 @@ class FiltroMarcasWidget extends StatelessWidget {
                   padding: EdgeInsets.all(4.0),
                   child: RaisedButton(
                     color: snapshot.data[index][filtro]
-                        ? Colors.grey
-                        : Colors.pink,
+                        ? Theme.of(context).primaryColorDark
+                        : Theme.of(context).primaryColorLight,
                     elevation: 10,
                     onPressed: () {
                       bloc.alternarFiltros(filtro);
