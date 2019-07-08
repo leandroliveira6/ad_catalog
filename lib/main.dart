@@ -1,6 +1,7 @@
 import 'package:ad_catalog/blocs/anuncios_bloc.dart';
 import 'package:ad_catalog/blocs/categorias_bloc.dart';
 import 'package:ad_catalog/blocs/imagem_bloc.dart';
+import 'package:ad_catalog/blocs/internet_bloc.dart';
 import 'package:ad_catalog/blocs/localizations_bloc.dart';
 import 'package:ad_catalog/blocs/loja_bloc.dart';
 import 'package:ad_catalog/blocs/marcas_bloc.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => UsuarioBloc()),
         Bloc((i) => ProcessamentoBloc()),
         Bloc((i) => ImagemBloc()),
+        Bloc((i) => InternetBloc()),
       ],
       child: CarregamentoView(),
     );
@@ -108,7 +110,36 @@ class CustomMaterialView extends StatelessWidget {
                 backgroundColor: Color(0xFFD6D3AE),
                 cardColor: Color(0xFFF0EDCE),
                 buttonColor: Color(0x99BF565B)),
-            home: ProdutosView(),
+            home: StreamBuilder(
+              stream: BlocProvider.getBloc<InternetBloc>().estadoInternet,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if(snapshot.hasData){
+                  if(snapshot.data == 'conectado'){
+                    return ProdutosView();
+                  }
+                  return Container(
+                    color: Colors.redAccent,
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.signal_wifi_off,
+                          color: Colors.white,
+                          size: MediaQuery.of(context).size.width / 2,
+                        ),
+                        SizedBox(height: 32),
+                        Text(
+                          'Desconectado!',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    )),
+                  );
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
           );
         }
         return Center(child: CircularProgressIndicator());
